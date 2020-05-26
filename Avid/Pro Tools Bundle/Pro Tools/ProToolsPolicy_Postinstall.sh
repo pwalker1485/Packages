@@ -51,10 +51,10 @@ if [[ "$pkgReceipt" != "" ]]; then
     echo "Checking User Template package requirements..."
         if [[ "$osShort" -eq "14" ]]; then
             echo "${macModelFull} running macOS ${osFull}"
-            /usr/local/jamf/bin/jamf policy -event pt2019_preferences_mojave
+            /usr/local/jamf/bin/jamf policy -event pt_bundle_preferences_mojave
         elif [[ "$osShort" -ge "15" ]]; then
             echo "${macModelFull} running macOS ${osFull}"
-            /usr/local/jamf/bin/jamf policy -event pt2019_preferences
+            /usr/local/jamf/bin/jamf policy -event pt_bundle_preferences
         else
             echo "${macModelFull} running macOS ${osFull}, no User Template package requirement"
         fi
