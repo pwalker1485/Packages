@@ -46,7 +46,7 @@ while ps axg | grep -vw grep | grep -w ditto > /dev/null;
 done
 echo "Copy finished"
 # Kill the copy in progress helper
-killall jamfHelper
+killall jamfHelper >/dev/null 2>&1
 sleep 2
 }
 
