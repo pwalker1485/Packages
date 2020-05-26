@@ -41,7 +41,7 @@ Please contact the IT Service Desk on 0345 058 4444 for assistance" -timeout 60 
 
 if [[ "$pkgReceipt" != "" ]]; then
     # Install was successful, call the next policy
-    /usr/local/bin/jamf policy -event pt_bundle_ProTools
+    /usr/local/bin/jamf policy -event pt_bundle_EffectsandVirtualInstruments
 else
     echo "eLicenser Manager package failed to install successfully"
     echo "Pro Tools bundle installation stopped!"

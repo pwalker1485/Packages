@@ -58,7 +58,7 @@ if [[ "$pkgReceipt" != "" ]]; then
         else
             echo "${macModelFull} running macOS ${osFull}, no User Template package requirement"
         fi
-    /usr/local/bin/jamf policy -event pt_bundle_EffectsandVirtualInstruments
+    /usr/local/bin/jamf policy -event pt_bundle_iLokManager
 else
     echo "Pro Tools package failed to install successfully"
     echo "Pro Tools bundle installation stopped!"

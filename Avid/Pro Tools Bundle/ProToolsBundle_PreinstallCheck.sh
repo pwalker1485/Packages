@@ -45,7 +45,7 @@ ${proToolsHDDshort} " -timeout 30 -button1 "Ok" -defaultButton "1"
 # Check if the HDD with the correct name is mounted
 if mount | grep "on $proToolsHDD" > /dev/null; then
     echo "Pro Tools HDD is mounted, starting installation..."
-    /usr/local/bin/jamf policy -event pt_bundle_iLokManager
+    /usr/local/bin/jamf policy -event pt_bundle_ProTools
 else
     echo "Pro Tools HDD not mounted, installation cannot continue!"
     # Advise user that the external HDD is not mounted
