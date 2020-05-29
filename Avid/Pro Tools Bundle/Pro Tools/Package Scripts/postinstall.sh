@@ -5,6 +5,8 @@
 ##################### Written by Phil Walker Mar 2020 ##################
 ########################################################################
 
+# Edit May 2020
+
 # Pro Tools DMG is copied to local machine via Package
 # DMG provided by Avid contains several packages
 

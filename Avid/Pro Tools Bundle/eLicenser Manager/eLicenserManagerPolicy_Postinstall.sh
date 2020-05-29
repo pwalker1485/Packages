@@ -5,6 +5,8 @@
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
 
+# Edit May 2020
+
 ########################################################################
 #                            Variables                                 #
 ########################################################################
@@ -38,6 +40,9 @@ Please contact the IT Service Desk on 0345 058 4444 for assistance" -timeout 60 
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
+
+# Kill the install in progess jamf Helper window
+killall jamfHelper 2>/dev/null
 
 if [[ "$pkgReceipt" != "" ]]; then
     # Install was successful, call the next policy

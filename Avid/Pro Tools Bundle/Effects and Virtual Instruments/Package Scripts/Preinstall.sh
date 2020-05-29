@@ -5,6 +5,8 @@
 #################### Written by Phil Walker Nov 2019 ###################
 ########################################################################
 
+# Edit May 2020
+
 # Check that an external hard drive is connected and named correctly
 # WKSxxxxx Pro Tools Sessions
 

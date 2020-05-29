@@ -5,6 +5,8 @@
 #################### Written by Phil Walker Nov 2019 ###################
 ########################################################################
 
+# Edit May 2020
+
 # Pro Tools Bundle package (Self Service only)
 # Mount the DMG's and then copy the effects and virtual instrument content
 

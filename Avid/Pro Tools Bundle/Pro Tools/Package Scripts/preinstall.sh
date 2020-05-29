@@ -5,6 +5,8 @@
 #################### Written by Phil Walker Nov 2019 ###################
 ########################################################################
 
+# Edit May 2020
+
 # Remove any previous version of Pro Tools to allow for upgrades or fresh installs
 
 ########################################################################

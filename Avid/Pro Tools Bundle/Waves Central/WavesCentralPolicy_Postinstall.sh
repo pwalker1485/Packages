@@ -5,6 +5,8 @@
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
 
+# Edit May 2020
+
 ########################################################################
 #                            Variables                                 #
 ########################################################################
@@ -49,6 +51,9 @@ Your Mac will now be rebooted" -alignDescription natural -timeout 15 -button1 "O
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
+
+# Kill the install in progess jamf Helper window
+killall jamfHelper 2>/dev/null
 
 if [[ "$pkgReceipt" != "" ]]; then
     # Install was successful, Mac will now be rebooted
