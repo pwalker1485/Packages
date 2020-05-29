@@ -5,12 +5,14 @@
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
 
+# Edit May 2020
+
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukptbundleeffectsandvirtualinstrumentsselfservice1.6")
+pkgReceipt=$(pkgutil --pkgs | grep "ukptbundleeffectsandvirtualinstrumentsselfservice1.7")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
