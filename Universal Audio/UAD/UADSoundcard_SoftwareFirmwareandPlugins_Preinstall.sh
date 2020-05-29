@@ -5,12 +5,22 @@
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
 
+# Edit May 2020
+
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
-#Get the current logged in user and store in variable
-loggedInUser=$(python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')
+# Jamf Helper
+jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
+# Helper icon
+helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+# Helper title
+helperTitle="Message from Bauer IT"
+# Helper heading
+helperHeading="Pro Tools Bundle"
+# Helper heading
+helperHeading="UAD Soundcard Software, Firmware and Plugins"
 
 ########################################################################
 #                            Functions                                 #
@@ -19,9 +29,9 @@ loggedInUser=$(python -c 'from SystemConfiguration import SCDynamicStoreCopyCons
 function jamfHelperDownloadInProgress ()
 {
 #Download in progress
-su - $loggedInUser <<'jamfmsg1'
-/Library/Application\ Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper -windowType utility -icon /Library/Application\ Support/JAMF/bin/Management\ Action.app/Contents/Resources/Self\ Service.icns -title "Message from Bauer IT" -heading "UAD Soundcard Software, Firmware and Plugins" -alignHeading natural -description "All software, firmware and plugins required for a UAD Apollo Twin Solo soundcard currently being downloaded and then installed..." -alignDescription natural &
-jamfmsg1
+"$jamfHelper" -windowType utility -icon "$helperIcon" -title "$helperTitle" \
+-heading "$helperHeading" -alignHeading natural -description "All software, firmware and plugins required \
+for a UAD Apollo Twin Solo or Duo Audio Interface is currently being downloaded and then installed..." -alignDescription natural &
 }
 
 ########################################################################
