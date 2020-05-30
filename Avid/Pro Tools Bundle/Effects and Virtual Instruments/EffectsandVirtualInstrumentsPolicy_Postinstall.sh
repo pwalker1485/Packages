@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukptbundleeffectsandvirtualinstrumentsselfservice1.7")
+pkgReceipt=$(pkgutil --pkgs | grep "ukptbundleeffectsandvirtualinstrumentsselfservice1.8")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
