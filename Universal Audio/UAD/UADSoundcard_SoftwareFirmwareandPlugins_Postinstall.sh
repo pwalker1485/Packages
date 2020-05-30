@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ########################################################################
-#       UAD Soundcard Software, Firmware and Plugins Postinstall       #
+#    UAD Audio Interface Software, Firmware and Plugins Postinstall    #
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
 
@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareandplugins9.12.1")
+pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareandpluginsv9.12.1")
 # OS Version Full and Short
 osFull=$(sw_vers -productVersion)
 osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
@@ -27,7 +27,7 @@ helperSelfServiceIcon="/Library/Application Support/JAMF/bin/Management Action.a
 # Helper title
 helperTitle="Message from Bauer IT"
 # Helper heading
-helperHeading="UAD Soundcard Software, Firmware and Plugins"
+helperHeading="UAD Software, Firmware and Plugins"
 
 ########################################################################
 #                            Functions                                 #
