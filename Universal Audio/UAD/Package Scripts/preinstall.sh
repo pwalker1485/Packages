@@ -1,13 +1,18 @@
 #!/bin/bash
 
 ########################################################################
-#       Uninversal Audio Digital Software and Plugins Preinstall       #
-################### Edited and Added to by Phil Walker #################
+#       Uninversal Audio Digital Software, Firmware and Plugins        #
+############################# preinstall ###############################
+####################### Written by Phil Walker #########################
 ########################################################################
 
-# Most of the below has been taken from UAD package.
-# It has ben edited to remove elements not required and elements that are not designed for package deployment
-# Additions have also been made to make it suitable for deployment and enterprise
+# Most of the below has been taken from the vendors package
+# I have removed sections/parts that are not required and sections/parts that are not designed for package deployment
+# Additions have been made to make it suitable for enterprise and deployment.
+# As this is preinstall cleanup script I have not been through every step the vendor included to see if it's necessary in our environment
+
+# The package from the vendor included 9 scripts and multiple steps that are considered bad practice from an enterprise perspective
+# Their package is very much aimed at a user with a personal Mac so I have re-engineered it to be more suitable for enterprise deployment
 
 ########################################################################
 #                            Variables                                 #
@@ -22,20 +27,65 @@ osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
 #                         Script starts here                           #
 ########################################################################
 
-# Shut down LUNA
-osascript -e 'tell application id "com.uaudio.luna" to quit'
+# Shut down LUNA - kill the process
+lunaPID=$(ps -A | grep -v grep | grep "LUNA" | awk '{print $1}')
+if [[ "$lunaPID" != "" ]]; then
+    kill -9 "$lunaPID"
+    sleep 2
+    if [[ "$(ps -A | grep -v grep | grep "LUNA")" == "" ]]; then
+        echo "LUNA process killed"
+    else
+        echo "Warning: Failed to kill LUNA process!"
+    fi
+fi
 
-# Shut down UAD Meter
-osascript -e 'tell application id "com.uaudio.uad_meter" to quit'
+# Shut down UAD Meter - kill the process
+uadMeterPID=$(ps -A | grep -v grep | grep "UAD Meter & Control Panel" | awk '{print $1}')
+if [[ "$uadMeterPID" != "" ]]; then
+    kill -9 "$uadMeterPID"
+    sleep 2
+    if [[ "$(ps -A | grep -v grep | grep "UAD Meter & Control Panel")" == "" ]]; then
+        echo "UAD Meter process killed"
+    else
+        echo "Warning: Failed to kill UAD Meter process!"
+    fi
+fi
 
-# Shut down the Console Shell App
-osascript -e 'tell application id "com.uaudio.console" to quit'
+# Shut down the Console Shell App - kill the process
+consolePID=$(ps -A | grep -v grep | grep "/Applications/Universal Audio/Console.app" | awk '{print $1}')
+if [[ "$consolePID" != "" ]]; then
+    kill -9 "$consolePID"
+    sleep 2
+    if [[ "$(ps -A | grep -v grep | grep "/Applications/Universal Audio/Console.app")" == "" ]]; then
+        echo "Console Shell App killed"
+    else
+        echo "Warning: Failed to kill Console Shell App process!"
+    fi
+fi
 
-# Shut down the mixer server
-osascript -e 'tell application id "com.uaudio.ua_mixer_engine" to quit'
+# Shut down the mixer server - kill the process
+mixerServerPID=$(ps -A | grep -v grep | grep "UA Mixer Engine" | awk '{print $1}')
+if [[ "$mixerServerPID" != "" ]]; then
+    kill -9 "$mixerServerPID"
+    sleep 2
+    if [[ "$(ps -A | grep -v grep | grep "UA Mixer Engine")" == "" ]]; then
+        echo "Mixer Server process killed"
+    else
+        echo "Warning: Failed to kill Mixer Server process!"
+    fi
+fi
 
-# Shut down the Realtime Rack
-osascript -e 'tell application id "com.uaudio.ua_realtime_rack" to quit'
+# Shut down the Realtime Rack - kill the process
+realtimeRackPID=$(ps -A | grep -v grep | grep "Realtime Rack" | awk '{print $1}')
+if [[ "$realtimeRackPID" != "" ]]; then
+    kill -9 "$realtimeRackPID"
+    sleep 2
+    if [[ "$(ps -A | grep -v grep | grep "Realtime Rack")" == "" ]]; then
+        echo "Realtime Rack process killed"
+    else
+        echo "Warning: Failed to kill Realtime Rack process!"
+    fi
+fi
 
 # Remove the UAD Mixer Engine login item
 if [[ -d "/Library/Application Support/Universal Audio/Apollo/UA Mixer Engine.app" ]]; then
@@ -103,7 +153,6 @@ rm -rf "/System/Library/PreferencePanes/UAFWAudio.prefPane" 2>/dev/null
 rm -rf "/bin/UAFWAudio" 2>/dev/null
 rm -rf "/Library/StartupItems/UAFWAudio" 2>/dev/null
 rm -rf "/Library/Application Support/UAFWAudio/UAFWAudio" 2>/dev/null
-
 
 # Remove TCAT components installed by our installer
 rm -f "/Library/LaunchDaemons/com.uaudio.UAFWAudio.plist" 2>/dev/null
@@ -180,7 +229,6 @@ if [[ -d "/Library/Application Support/Universal Audio" ]]; then
   fi
 
 fi
-
 
 # Delete "/Applications/Universal Audio" files
 
@@ -470,7 +518,6 @@ if [[ -d "${AUCOMPDIR}/UAD Tremolo.component" ]]; then
     rm -rf "${AUCOMPDIR}/UAD Tremolo.component"
 fi
 
-
 # delete uad2-only mono ---
 #UAD-2 Mono only VST plugins delete
 VSTMONODIR="/Library/Audio/Plug-Ins/VST/Powered Plug-Ins/Mono"
@@ -586,7 +633,6 @@ if [[ -d "${VSTDIR} MXR Flanger-Doubler.vst" ]]; then
     rm -rf "${VSTDIR} MXR Flanger-Doubler.vst"
 fi
 
-
 # delete uad2-only au ---
 #UAD-2 AU only plugins
 AUCOMPDIR="/Library/Audio/Plug-Ins/Components"
@@ -646,12 +692,9 @@ if [[ -d "${AUCOMPDIR} MXR Flanger-Doubler.vst" ]]; then
     rm -rf "${AUCOMPDIR} MXR Flanger-Doubler.vst"
 fi
 
-
 # delete apollo-only
 UADIR="/Library/Application Support/Universal Audio/UAD-2 Powered Plug-Ins"
-
 VSTDIR="/Library/Audio/Plug-Ins/VST/Powered Plug-Ins"
-
 AUCOMPDIR="/Library/Audio/Plug-Ins/Components"
 
 if [[ -d "${UADIR}/Console Recall.vst" ]]; then
@@ -714,7 +757,6 @@ fi
 if [[ -d "/Applications/Universal Audio" ]];then
     rm -rf "/Applications/Universal Audio"
 fi
-
 
 # rtas plug-in settings rename
 if [[ -d "/Library/Application Support/Digidesign/Plug-In Settings" ]]; then
@@ -1036,7 +1078,6 @@ fi
 # rename old placeholder OWS preset folder named "UAD OWS" to "UAD Ocean Way"
 
 RTASPRESET_DIR="/Library/Application Support/Digidesign/Plug-In Settings"
-
 SRCOWS_DIR="UAD OWS"
 DESTOWS_DIR="UAD Ocean Way"
 
