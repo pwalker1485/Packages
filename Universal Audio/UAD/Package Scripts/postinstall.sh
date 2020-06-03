@@ -22,10 +22,6 @@ loggedInUser=$(stat -f %Su /dev/console)
 dockutilLoc="/usr/local/bin/dockutil"
 # Dock Items Array
 dockItems=( "com.uaudio.uad_meter" "com.uaudio.console" "com.uaudio.ua_realtime_rack" "com.uaudio.uninstaller" )
-# UAD Meter Launcher app path
-meterLauncher="/Library/Application Support/Universal Audio/UAD Meter Launcher.app"
-# UA Mixer Engine app path
-mixerEngine="/Library/Application Support/Universal Audio/Apollo/UA Mixer Engine.app"
 
 ########################################################################
 #                         Script starts here                           #
@@ -87,28 +83,6 @@ fi
 # Delete Meter Cache
 
 rm -rf "/Users/$loggedInUser/Library/Caches/UAD Meter & Control Panel" 2>/dev/null
-
-# Launch UAD Meter Launcher and UA Mixer Engine
-
-# Check if the UAD Meter Launcher and UA Mixer Engine applications are installed
-if [[ -d "$meterLauncher" ]] && [[ -d "$mixerEngine" ]]; then
-    # If found, launch the apps
-	echo "UAD Meter Launcher and UA Mixer Engine apps found"
-	sudo -u "$loggedInUser" open -F "$meterLauncher"
-	sudo -u "$loggedInUser" open -F "$mixerEngine"
-	sleep 3
-    # Confirm that the apps were launched successfully
-	meterLauncherProc=$(ps -A | grep -v grep | grep "UAD Meter & Control Panel")
-	mixerEnginerProc=$(ps -A | grep -v grep | grep "UA Mixer Engine")
-	if [[ "$meterLauncherProc" != "" ]] && [[ "$meterLauncherProc" != "" ]]; then
-		echo "UAD Meter Launcher and UA Mixer Engine launched successfully"
-	else
-		echo "Failed to launch UAD Meter Launcher and UA Mixer Engine, logout required"
-	fi
-else
-# If not found, do nothing
-	echo "UAD Meter Launcher and UA Mixer Engine apps not found, nothing to do"
-fi
 
 # Clean-up temp files
 

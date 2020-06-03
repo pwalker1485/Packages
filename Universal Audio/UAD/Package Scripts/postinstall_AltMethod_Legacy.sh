@@ -30,10 +30,6 @@ osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
 kextPreCatalina="/System/Library/Extensions"
 # Extensions directory Catalina or later
 kextCatalinaLater="/Library/Extensions"
-# UAD Meter Launcher app path
-meterLauncher="/Library/Application Support/Universal Audio/UAD Meter Launcher.app"
-# UA Mixer Engine app path
-mixerEngine="/Library/Application Support/Universal Audio/Apollo/UA Mixer Engine.app"
 
 ########################################################################
 #                            Functions                                 #
@@ -141,28 +137,6 @@ fi
 # Delete Meter Cache
 
 rm -rf "/Users/$loggedInUser/Library/Caches/UAD Meter & Control Panel" 2>/dev/null
-
-# Launch UAD Meter Launcher and UA Mixer Engine
-
-# Check if the UAD Meter Launcher and UA Mixer Engine applications are installed
-if [[ -d "$meterLauncher" ]] && [[ -d "$mixerEngine" ]]; then
-    # If found, launch the apps
-	echo "UAD Meter Launcher and UA Mixer Engine apps found"
-	sudo -u "$loggedInUser" open -F "$meterLauncher"
-	sudo -u "$loggedInUser" open -F "$mixerEngine"
-	sleep 3
-    # Confirm that the apps were launched successfully
-	meterLauncherProc=$(ps -A | grep "UAD Meter & Control Panel" | grep -v grep)
-	mixerEnginerProc=$(ps -A | grep "UA Mixer Engine" | grep -v grep)
-	if [[ "$meterLauncherProc" != "" ]] && [[ "$meterLauncherProc" != "" ]]; then
-		echo "UAD Meter Launcher and UA Mixer Engine launched successfully"
-	else
-		echo "Failed to launch UAD Meter Launcher and UA Mixer Engine, logout required"
-	fi
-else
-# If not found, do nothing
-	echo "UAD Meter Launcher and UA Mixer Engine apps not found, nothing to do"
-fi
 
 # Clean-up temp files
 
