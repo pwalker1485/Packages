@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwarepluginsv9.12.1")
+pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareplugins9.12.1")
 # OS Version Full and Short
 osFull=$(sw_vers -productVersion)
 osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
@@ -46,8 +46,9 @@ function jamfHelperUpdateComplete ()
 {
 #Show a message via Jamf Helper that the install has completed
 "$jamfHelper" -windowType utility -icon "$helperSelfServiceIcon" -title "$helperTitle" \
--heading "$helperHeading" -description "Installation complete ✅" \
--alignDescription natural -timeout 15 -button1 "Ok" -defaultButton "1"
+-heading "$helperHeading" -description "Installation complete ✅
+
+Your Mac will now be rebooted" -alignDescription natural -timeout 15 -button1 "Ok" -defaultButton "1"
 }
 
 ########################################################################
@@ -71,7 +72,7 @@ fi
 killall jamfHelper
 
 if [[ "$pkgReceipt" != "" ]]; then
-    # Install was successful
+    # Install was successful, the Mac will now be rebooted
     jamfHelperUpdateComplete
 else
     echo "UAD Soundcard Software, Firmware and Plugins package failed to install successfully"
