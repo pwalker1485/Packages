@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareplugins9.12.1")
+pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareandplugins9.12.1")
 # OS Version Full and Short
 osFull=$(sw_vers -productVersion)
 osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
