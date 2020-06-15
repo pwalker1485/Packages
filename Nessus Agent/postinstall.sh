@@ -39,7 +39,7 @@ if [[ -e "$nessusCLI" ]]; then
 fi
 
 # Mount the disk image
-/usr/bin/hdiutil mount -noverify -nobrowse /usr/local/Nessus/NessusAgent-7.6.3.dmg
+/usr/bin/hdiutil mount -noverify -nobrowse "/usr/local/Nessus/NessusAgent-7.7.0.dmg"
 
 # Install the package
 /usr/sbin/installer -pkg "/Volumes/Nessus Agent Install/Install Nessus Agent.pkg" -target /
