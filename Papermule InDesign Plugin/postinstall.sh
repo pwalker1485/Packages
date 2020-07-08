@@ -35,11 +35,12 @@ fi
 #                         Script starts here                           #
 ########################################################################
 
+# Install the plugin for all versions of InDesign found
 while IFS= read -r line; do
-    cp -p -f "$startupScript" "$line"
-    echo "Copied Papermule script to $line..."
+    cp -R -p -f "$startupScript" "$line"
+    echo "Copied Papermule script to ${line}"
 done < /tmp/InDesignInstalls.txt
-
+# Remove all temp files
 cleanUp
 
 exit 0
