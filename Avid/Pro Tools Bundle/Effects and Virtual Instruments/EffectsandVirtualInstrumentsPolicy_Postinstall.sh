@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukptbundleeffectsandvirtualinstrumentsselfservice1.8")
+pkgReceipt=$(pkgutil --pkgs | grep "ukptbundleeffectsandvirtualinstruments")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
@@ -28,7 +28,7 @@ function jamfHelperFailed ()
 {
 # jamf Helper to advise that an external disk for sessions and virtual instrument content has not been found
 "$jamfHelper" -windowType utility -icon "$helperIcon" -title "$helperTitle" \
--heading "$helperHeading" -description "The Effects and Virtual Instruments bundle failed to install successfully❗️
+-description "The Effects and Virtual Instruments bundle failed to install successfully❗️
 
 No further software included in the Pro Tools bundle will be installed.
 

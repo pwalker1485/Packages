@@ -14,7 +14,11 @@
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
-helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+if [[ -d "/tmp/ProAudioAppIcons" ]]; then
+    helperIcon="/tmp/ProAudioAppIcons/ProTools.icns"
+else
+    helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+fi
 # Helper title
 helperTitle="Message from Bauer IT"
 # Helper heading

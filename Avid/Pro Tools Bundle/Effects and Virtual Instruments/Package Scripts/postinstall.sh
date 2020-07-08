@@ -14,16 +14,20 @@
 #                            Variables                                 #
 ########################################################################
 
-# Get the current logged in user
-loggedInUser=$(stat -f %Su /dev/console)
 # Get the Mac hostname
 hostName=$(scutil --get HostName)
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
-helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+if [[ -d "/tmp/ProAudioAppIcons" ]]; then
+    helperIcon="/tmp/ProAudioAppIcons/Xpand2.png"
+else
+    helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+fi
 # Helper title
-helperTitle="Pro Tools Bundle"
+helperTitle="Message from Bauer IT"
+# Helper heading
+helperHeading="Pro Tools Bundle"
 
 ########################################################################
 #                            Functions                                 #
@@ -32,7 +36,7 @@ helperTitle="Pro Tools Bundle"
 function jamfHelperCopyInProgress ()
 {
 # Show a message via Jamf Helper that the data copy is in progress
-"$jamfHelper" -windowType utility -icon "$helperIcon" -title "Message from Bauer IT" -heading "$helperTitle" -alignHeading natural \
+"$jamfHelper" -windowType utility -icon "$helperIcon" -title "$helperTitle" -heading "$helperHeading" -alignHeading natural \
 -description "Effects and Virtual Instrument bundle installation in progress...
 
 This can take between 2-20 minutes to complete depending on your external hard disk" -alignDescription natural &
