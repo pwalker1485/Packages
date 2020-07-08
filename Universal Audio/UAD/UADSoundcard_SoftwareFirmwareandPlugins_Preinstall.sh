@@ -18,8 +18,6 @@ helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents
 # Helper title
 helperTitle="Message from Bauer IT"
 # Helper heading
-helperHeading="Pro Tools Bundle"
-# Helper heading
 helperHeading="UAD Software, Firmware and Plugins"
 
 ########################################################################
