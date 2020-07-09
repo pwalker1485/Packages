@@ -14,7 +14,7 @@
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
-helperIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+helperIcon="/System/Library/CoreServices/Installer.app/Contents/Resources/Installer.icns"
 # Helper title
 helperTitle="Message from Bauer IT"
 # Helper heading

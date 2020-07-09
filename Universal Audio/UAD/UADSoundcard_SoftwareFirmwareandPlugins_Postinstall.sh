@@ -22,8 +22,12 @@ macModelFull=$(system_profiler SPHardwareDataType | grep "Model Name" | sed 's/M
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper problem icon 
 helperProblemIcon="/System/Library/CoreServices/Problem Reporter.app/Contents/Resources/ProblemReporter.icns"
-# Helper SS icon
-helperSelfServiceIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+# Helper success icon
+if [[ -d "/tmp/ProAudioAppIcons" ]]; then
+    helperSuccessIcon="/tmp/ProAudioAppIcons/UAD.icns"
+else
+    helperSuccessIcon="/Library/Application Support/JAMF/bin/Management Action.app/Contents/Resources/Self Service.icns"
+fi
 # Helper title
 helperTitle="Message from Bauer IT"
 # Helper heading
@@ -45,7 +49,7 @@ Please contact the IT Service Desk on 0345 058 4444 for assistance" -timeout 60 
 function jamfHelperUpdateComplete ()
 {
 #Show a message via Jamf Helper that the install has completed
-"$jamfHelper" -windowType utility -icon "$helperSelfServiceIcon" -title "$helperTitle" \
+"$jamfHelper" -windowType utility -icon "$helperSuccessIcon" -title "$helperTitle" \
 -heading "$helperHeading" -description "Installation complete ✅
 
 Your Mac will now be rebooted" -alignDescription natural -timeout 15 -button1 "Ok" -defaultButton "1"
