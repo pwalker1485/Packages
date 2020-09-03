@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ########################################################################
 #                   Install and Link Nessus Agent                      #
@@ -27,42 +27,35 @@ port="The Port"
 if [[ -e "$nessusCLI" ]]; then
     "$nessusCLI" agent unlink >/dev/null 2>&1
     # Check if the unlink command was successful
-    commandResult=$(echo "$?")
-    if [[ "$commandResult" -eq "0" ]]; then
+    unlinkResult="$?"
+    if [[ "$unlinkResult" -eq "0" ]]; then
         echo "$computerName has been successfully unlinked"
-    elif [[ "$commandResult" -eq "2" ]]; then
+    elif [[ "$unlinkResult" -eq "2" ]]; then
         echo "No host information found, unlink not required"
     else
         echo "Failed to unlink $computerName"
         exit 1
     fi
 fi
-
 # Mount the disk image
-/usr/bin/hdiutil mount -noverify -nobrowse "/usr/local/Nessus/NessusAgent-7.7.0.dmg"
-
+/usr/bin/hdiutil mount -noverify -nobrowse "/usr/local/Nessus/NessusAgent-8.0.0.dmg"
 # Install the package
 /usr/sbin/installer -pkg "/Volumes/Nessus Agent Install/Install Nessus Agent.pkg" -target /
-
 # Unmount the disk image
 /usr/bin/hdiutil unmount -force "/Volumes/Nessus Agent Install"
-
 # Allow time for the agent to start
 sleep 3
-
 # Delete the disk image
 rm -rf "/usr/local/Nessus/"
-
 # Link the agent to the server
 "$nessusCLI" agent link --key="$key" --name="$computerName"."$domain" --groups="$group" --host="$host"."$domain" --port="$port" >/dev/null 2>&1
-
 # Check if the computer is now successfully linked
-if [[ "$?" -eq "0" ]]; then
+linkResult="$?"
+if [[ "$linkResult" -eq "0" ]]; then
     echo "$computerName has been successfully linked to $host.$domain"
     echo "Device Group: $group"
 else
     echo "Failed to link $computerName to $host.$domain"
     exit 1
 fi
-
 exit 0
