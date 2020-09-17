@@ -387,10 +387,10 @@ rm -rf "/Library/Application Support/Universal Audio/com.Universal Audio.fxshare
 
 # Unload and Delete KEXTs
 # If any UAD KEXTs are loaded, unload them
-kextCheck=$(kextstat | grep "UAD\|UAF" | awk '{print $6}')
+kextCheck=$(kextstat -l | grep "UAD\|UAF" | awk '{print $6}')
 if [[ "$kextCheck" != "" ]]; then
-    for kext in "$kextCheck"; do
-        /sbin/kextunload -b "${kext}" 2>/dev/null
+    for kext in $kextCheck; do
+        /sbin/kextunload -b "$kext" 2>/dev/null
     done
 fi
 
