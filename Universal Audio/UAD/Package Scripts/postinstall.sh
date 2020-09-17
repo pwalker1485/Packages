@@ -69,7 +69,7 @@ if [[ -d "/Library/Extensions/UAD2System.kext" ]] && [[ -d "/Library/Extensions/
     /sbin/kextload -b "com.uaudio.driver.UAFWAudio" 2>/dev/null
     sleep 2
     # Check the KEXTs have been loaded
-    kextCheck=$(kextstat | grep "UAD\|UAF" | awk '{print $6}' | wc -l)
+    kextCheck=$(kextstat -l | grep -c "UAD\|UAF")
     if [[ "$kextCheck" -eq "2" ]]; then
 	    echo "KEXTs loaded successfully"
     else
