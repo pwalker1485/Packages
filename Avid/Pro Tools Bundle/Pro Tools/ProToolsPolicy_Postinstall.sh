@@ -17,7 +17,7 @@ osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
 # Mac model full name
 macModelFull=$(system_profiler SPHardwareDataType | grep "Model Name" | sed 's/Model Name: //' | xargs)
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukavidprotools2020.3.0")
+pkgReceipt=$(pkgutil --pkgs | grep "ukavidprotools2020.9.1")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
