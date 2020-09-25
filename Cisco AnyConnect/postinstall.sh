@@ -40,7 +40,7 @@ if [[ -f "$clientUninstall" ]]; then
     pkgutil --forget "$previousReceipt" >/dev/null 2>&1
     sleep 2
 else
-	echo "No previous Cisco Client found"
+	echo "No previous Cisco AnyConnect Secure Mobility Client found"
 fi
 # If found, run the Cisco AnyConnect DART uninstaller
 if [[ -f "$dartUninstall" ]]; then
@@ -57,18 +57,18 @@ else
 fi
 # If found, remove previous Cisco preferences
 if [[ -d "$configDir" ]]; then
-	echo "Removing previous Cisco preferences..."
+	echo "Removing previous Cisco client preferences..."
 	rm -rf "$configDir"
     if [[ ! -d "$configDir" ]]; then
-        echo "Previous Cisco preferences removed"
+        echo "Previous Cisco client preferences removed"
     else
-        echo "Failed to remove previous Cisco preferences"
+        echo "Failed to remove previous Cisco client preferences"
     fi
     pkgutil --forget com.cisco.pkg.anyconnect.vpn >/dev/null 2>&1
     pkgutil --forget com.cisco.pkg.anyconnect.posture >/dev/null 2>&1
     pkgutil --forget "$previousReceipt" >/dev/null 2>&1
 else
-	echo "No previous Cisco preferences found"
+	echo "No previous Cisco client preferences found"
 fi
 
 # Install current package
@@ -76,7 +76,7 @@ fi
 unzip -q "${installDir}/${packageZip}" -d "$installDir"
 sleep 2
 if [[ -e "${installDir}/${ciscoPackage}" ]]; then
-    echo "Installing Cisco AnyConnect..."
+    echo "Installing Cisco AnyConnect Secure Mobility Client..."
     # Run Cisco AnyConnect installer with install switches from xml
     /usr/sbin/installer -applyChoiceChangesXML "${installDir}/anyconnect4-choices-vpn-only.xml" -pkg "${installDir}/${ciscoPackage}" -target /
     # wait for 10 seconds for install to complete
@@ -85,13 +85,13 @@ if [[ -e "${installDir}/${ciscoPackage}" ]]; then
     # Install client prefs to disable auto start on login and set connection address to myvpn.bauermedia.co.uk
     ditto -v "${installDir}/new.xml" "${configDir}/anyconnect/profile/"
     if [[ -f "${configDir}/anyconnect/profile/new.xml" ]]; then
-        echo "Cisco AnyConnect preferences set"
+        echo "Client preferences set successfully"
     else
-        echo "Failed to set Cisco AnyConnect preferences"
+        echo "Failed to set client preferences"
         exit 1
     fi
 else
-    echo "Cisco AnyConnect package not found, exiting"
+    echo "Cisco AnyConnect Secure Mobility Client package not found, exiting"
     exit 1
 fi
 
