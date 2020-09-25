@@ -13,8 +13,6 @@
 clientUninstall="/opt/cisco/anyconnect/bin/vpn_uninstall.sh"
 # Cisco DART uninstall script
 dartUninstall="/opt/cisco/anyconnect/bin/dart_uninstall.sh"
-# Cisco app
-ciscoApp="/Applications/Cisco/Cisco AnyConnect Secure Mobility Client.app"
 # Cisco DART app
 dartApp="/Applications/Cisco/Cisco AnyConnect DART.app"
 # Cisco config directory
