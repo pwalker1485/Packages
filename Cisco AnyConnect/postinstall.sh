@@ -83,7 +83,7 @@ fi
 echo "Installing Cisco AnyConnect..."
 unzip -q "${installDir}/${packageZip}" -d "$installDir"
 sleep 2
-if [[ -e "$ciscoPackage" ]]; then
+if [[ -e "${installDir}/${ciscoPackage}" ]]; then
     # Run Cisco AnyConnect installer with install switches from xml
     /usr/sbin/installer -applyChoiceChangesXML "${installDir}/anyconnect4-choices-vpn-only.xml" -pkg "${installDir}/${ciscoPackage}" -target /
     # wait for 10 seconds for install to complete
