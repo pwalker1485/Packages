@@ -6,6 +6,7 @@
 ########################################################################
 
 # Edit May 2020
+# Edit Sep 2020 (Updated and removed installer of Avid Codecs LE and Avid Link Updater packages)
 
 # Pro Tools DMG is copied to local machine via Package
 # DMG provided by Avid contains several packages
@@ -15,24 +16,20 @@
 ########################################################################
 
 # Mount the the DMG silently
-hdiutil mount -noverify -nobrowse "/usr/local/Pro Tools/Pro_Tools_2020.3.0_Mac.dmg"
+hdiutil mount -noverify -nobrowse "/usr/local/Pro Tools/Pro_Tools_2020.9.1_Mac.dmg"
 
-# Install all packages/apps in correct order
+# Install all packages in correct order
 # Pro Tools
-installer -pkg "/Volumes/Pro Tools/Install Pro Tools 2020.3.0.pkg" -target /
-# Codecs LE
-installer -pkg "/usr/local/Pro Tools/UK_Avid_CodecsLE_2.7.3.pkg" -target /
+installer -pkg "/Volumes/Pro Tools/Install Pro Tools 2020.9.1.pkg" -target /
 # HD Driver
 installer -pkg "/Volumes/Pro Tools/Driver Installers/Install Avid HD Driver.pkg" -target /
-# Avid Link Update
-installer -pkg "/usr/local/Pro Tools/UK_Avid_AvidLink_20.4.pkg" -target /
 
 # Unmount the DMG
 hdiutil unmount -force "/Volumes/Pro Tools/"
 # Remove Install DMG's and packages
-rm -rf "/usr/local/Pro Tools/"
+rm -rf "/usr/local/Pro Tools"
 
-if [[ ! -d "/usr/local/Pro Tools/" ]]; then
+if [[ ! -d "/usr/local/Pro Tools" ]]; then
     echo "Clean up has been successful"
 else
     echo "Clean up FAILED, please delete the folder /usr/local/Pro Tools/ manually"
