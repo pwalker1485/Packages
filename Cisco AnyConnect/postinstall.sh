@@ -35,17 +35,12 @@ previousReceipt="ciscoanyconnect4.6.02074"
 # Remove all previous versions
 # If found, run the Cisco AnyConnect client uninstaller
 if [[ -f "$clientUninstall" ]]; then
-	echo "Removing previous Cisco AnyConnect client..."
+    # Cisco uninstall script print status
 	bash "$clientUninstall"
 	pkgutil --forget com.cisco.pkg.anyconnect.vpn >/dev/null 2>&1
     pkgutil --forget com.cisco.pkg.anyconnect.posture >/dev/null 2>&1
     pkgutil --forget "$previousReceipt" >/dev/null 2>&1
     sleep 2
-    if [[ ! -d "$ciscoApp" ]]; then
-        echo "Previous Cisco AnyConnect client removed"
-    else
-        echo "Failed to remove previous Cisco AnyConnect client"
-    fi
 else
 	echo "No previous Cisco Client found"
 fi
@@ -80,10 +75,10 @@ fi
 
 # Install current package
 # Unzip the package
-echo "Installing Cisco AnyConnect..."
 unzip -q "${installDir}/${packageZip}" -d "$installDir"
 sleep 2
 if [[ -e "${installDir}/${ciscoPackage}" ]]; then
+    echo "Installing Cisco AnyConnect..."
     # Run Cisco AnyConnect installer with install switches from xml
     /usr/sbin/installer -applyChoiceChangesXML "${installDir}/anyconnect4-choices-vpn-only.xml" -pkg "${installDir}/${ciscoPackage}" -target /
     # wait for 10 seconds for install to complete
