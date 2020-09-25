@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "uksteinbergelicensercontrolcenter6.11.10.2266")
+pkgReceipt=$(pkgutil --pkgs | grep "uksteinbergelicensercontrolcenter6.12.4.1275")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
