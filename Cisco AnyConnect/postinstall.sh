@@ -20,11 +20,11 @@ configDir="/opt/cisco"
 # Temp install location
 installDir="/usr/local/ciscoanyconnect"
 # Zip
-packageZip="UK_Cisco_AnyConnect_4.8.02045.pkg.zip"
+packageZip="UK_Cisco_AnyConnect_4.9.01095.pkg.zip"
 # Package
-ciscoPackage="UK_Cisco_AnyConnect_4.8.02045.pkg"
+ciscoPackage="UK_Cisco_AnyConnect_4.9.01095.pkg"
 # Previous version receipt
-previousReceipt="ciscoanyconnect4.6.02074"
+previousReceipt="ukciscoanyconnect4.8.02045"
 
 ########################################################################
 #                         Script starts here                           #
@@ -37,6 +37,7 @@ if [[ -f "$clientUninstall" ]]; then
 	bash "$clientUninstall"
 	pkgutil --forget com.cisco.pkg.anyconnect.vpn >/dev/null 2>&1
     pkgutil --forget com.cisco.pkg.anyconnect.posture >/dev/null 2>&1
+    pkgutil --forget ukciscoanyconnecttimeout >/dev/null 2>&1 # Settings only package
     pkgutil --forget "$previousReceipt" >/dev/null 2>&1
     sleep 2
 else
@@ -66,6 +67,7 @@ if [[ -d "$configDir" ]]; then
     fi
     pkgutil --forget com.cisco.pkg.anyconnect.vpn >/dev/null 2>&1
     pkgutil --forget com.cisco.pkg.anyconnect.posture >/dev/null 2>&1
+    pkgutil --forget ukciscoanyconnecttimeout >/dev/null 2>&1 # Settings only package    
     pkgutil --forget "$previousReceipt" >/dev/null 2>&1
 else
 	echo "No previous Cisco client preferences found"
