@@ -20,11 +20,27 @@ configDir="/opt/cisco"
 # Temp install location
 installDir="/usr/local/ciscoanyconnect"
 # Zip
-packageZip="UK_Cisco_AnyConnect_4.9.01095.pkg.zip"
+packageZip="UK_Cisco_AnyConnect_4.9.02028.pkg.zip"
 # Package
-ciscoPackage="UK_Cisco_AnyConnect_4.9.01095.pkg"
+ciscoPackage="UK_Cisco_AnyConnect_4.9.02028.pkg"
+
+########################################################################
+#                            Functions                                 #
+########################################################################
+
+function forgetCiscoReceipts ()
+{
 # Previous version receipt
-previousReceipt="ukciscoanyconnect4.8.02045"
+previousReceipts=$(pkgutil --pkgs | grep -i "cisco")
+if [[ "$previousReceipts" != "" ]]; then
+    echo "Removing previous Cisco package receipts..."
+    for receipt in $previousReceipts; do
+        pkgutil --forget "$receipt"
+    done
+else
+    echo "No previous Cisco package receipts found"
+fi
+}
 
 ########################################################################
 #                         Script starts here                           #
@@ -35,10 +51,8 @@ previousReceipt="ukciscoanyconnect4.8.02045"
 if [[ -f "$clientUninstall" ]]; then
     # Cisco uninstall script print status
 	bash "$clientUninstall"
-	pkgutil --forget com.cisco.pkg.anyconnect.vpn >/dev/null 2>&1
-    pkgutil --forget com.cisco.pkg.anyconnect.posture >/dev/null 2>&1
-    pkgutil --forget ukciscoanyconnecttimeout >/dev/null 2>&1 # Settings only package
-    pkgutil --forget "$previousReceipt" >/dev/null 2>&1
+    # Removing previous package receipts
+	forgetCiscoReceipts
     sleep 2
 else
 	echo "No previous Cisco AnyConnect Secure Mobility Client found"
@@ -65,10 +79,8 @@ if [[ -d "$configDir" ]]; then
     else
         echo "Failed to remove previous Cisco client preferences"
     fi
-    pkgutil --forget com.cisco.pkg.anyconnect.vpn >/dev/null 2>&1
-    pkgutil --forget com.cisco.pkg.anyconnect.posture >/dev/null 2>&1
-    pkgutil --forget ukciscoanyconnecttimeout >/dev/null 2>&1 # Settings only package    
-    pkgutil --forget "$previousReceipt" >/dev/null 2>&1
+    # Removing previous package receipts
+    forgetCiscoReceipts
 else
 	echo "No previous Cisco client preferences found"
 fi
