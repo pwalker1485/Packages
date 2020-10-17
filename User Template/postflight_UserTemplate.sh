@@ -29,22 +29,22 @@ if [[ -z "$tmp_users" ]]; then
 	exit 1
 fi
 
-# Make a list of homes that are in /Users or /Volumes/Users
-for the_folder in "$targetVolume/Users" "/Volumes/Users"; do
+# Make a list of homes that are in /Users
+for the_folder in ${targetVolume}/Users; do
     if [[ -d "$the_folder" ]]; then
         ls -lTn "$the_folder" | awk -v vDIR="$the_folder" '/^d/{vUID = $3; vGID = $4; sub("^.*[0-9]+:[0-9]+.[0-9]+","");sub("^ +","");if($0 !~ "^[.]"){print vUID, vGID, vDIR "/" $0}}'
     fi
 done | sed '/\/Shared/d' >> "$tmp_users"
 
 # Walk the list of user details, get the users UID, GID and home folder path
-cat "$tmp_users" | while read the_user; do
+cat "$tmp_users" | while read -r the_user; do
     user_uid=$(echo "$the_user" | awk '{print $1}')
     user_gid=$(echo "$the_user" | awk '{print $2}')
     user_home=$(echo "$the_user" | awk '{$1 = ""; $2 = ""; sub("^ +","");print}')
     # Only process this user if we have a home folder path
     if [[ -n "$user_home" ]]; then
         # Get a list of files and folders loaded into user templates from this packages BOM and walk that list
-        lsbom -p Mf "$pathToPackage/Contents/Archive.bom" | awk -v tPath=".$template_path." '$0 ~ tPath {print}' | while read the_item; do
+        lsbom -p Mf "$pathToPackage/Contents/Archive.bom" | awk -v tPath=".$template_path." '$0 ~ tPath {print}' | while read -r the_item; do
             # check if the item is a directory or file entry, also get the items source path in user templates and target path in the users home folder
             item_is_dir=$(echo "$the_item" | grep -ci "^d")
             source_item=$(echo "$the_item" | sed -E 's/^[^[:blank:]]+[[:blank:]]+[.]//')
@@ -57,7 +57,7 @@ cat "$tmp_users" | while read the_user; do
                 else
                     ditto "$targetVolume/$source_item" "$target_item"
                 fi
-                chown $user_uid:$user_gid "$target_item"
+                chown "$user_uid":"$user_gid" "$target_item"
             fi
         done
     fi
