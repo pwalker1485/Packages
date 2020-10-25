@@ -108,12 +108,7 @@ fi
 # Load the kext
 if [[ "$kextCheck" == "" ]]; then
     echo "Loading the Censhare kext..."
-    while [[ "$kextCheck" == "" ]]; do
-        /sbin/kextload -b "com.censhare.vfs.CenshareFS" 2>/dev/null
-    sleep 2
-    # re-populate variable
-    kextCheck=$(kextstat -l | grep "com.censhare.vfs.CenshareFS" | awk '{print $6}')
-    done
+    /sbin/kextload -b "com.censhare.vfs.CenshareFS" 2>/dev/null
     echo "Censhare kext successfully loaded"
 fi
 

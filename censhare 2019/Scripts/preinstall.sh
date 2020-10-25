@@ -44,13 +44,8 @@ fi
 
 if [[ "$kextCheck" != "" ]]; then
     echo "Unloading the Censhare kext..."
-    while [[ "$kextCheck" != "" ]]; do
-        for kext in $kextCheck; do
-            /sbin/kextunload -b "${kext}" 2>/dev/null
-        done
-    sleep 2
-    # re-populate variable
-    kextCheck=$(kextstat -l | grep "com.censhare.vfs.CenshareFS" | awk '{print $6}')
+    for kext in $kextCheck; do
+        /sbin/kextunload -b "${kext}" 2>/dev/null
     done
     echo "Censhare kext successfully unloaded"
 fi
