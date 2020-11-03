@@ -12,7 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukwaveswavescentral11.0.60")
+pkgReceipt=$(pkgutil --pkgs | grep "ukwaveswavescentral12.0.8")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper problem icon 
