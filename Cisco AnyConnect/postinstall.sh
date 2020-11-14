@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 ########################################################################
 #     Install Cisco AnyConnect Secure Mobility Client - postinstall    #
@@ -9,81 +9,26 @@
 #                            Variables                                 #
 ########################################################################
 
-# Cisco client uninstall script
-clientUninstall="/opt/cisco/anyconnect/bin/vpn_uninstall.sh"
-# Cisco DART uninstall script
-dartUninstall="/opt/cisco/anyconnect/bin/dart_uninstall.sh"
-# Cisco DART app
-dartApp="/Applications/Cisco/Cisco AnyConnect DART.app"
+# OS Version
+osVersion=$(sw_vers -productVersion)
+# macOS Big Sur version number
+bigSur="11"
 # Cisco config directory
 configDir="/opt/cisco"
 # Temp install location
 installDir="/usr/local/ciscoanyconnect"
 # Zip
-packageZip="UK_Cisco_AnyConnect_4.9.02028.pkg.zip"
+packageZip="AnyConnect.pkg.zip"
 # Package
-ciscoPackage="UK_Cisco_AnyConnect_4.9.02028.pkg"
-
-########################################################################
-#                            Functions                                 #
-########################################################################
-
-function forgetCiscoReceipts ()
-{
-# Previous version receipt
-previousReceipts=$(pkgutil --pkgs | grep -i "cisco")
-if [[ "$previousReceipts" != "" ]]; then
-    echo "Removing previous Cisco package receipts..."
-    for receipt in $previousReceipts; do
-        pkgutil --forget "$receipt"
-    done
-else
-    echo "No previous Cisco package receipts found"
-fi
-}
+ciscoPackage="AnyConnect.pkg"
+# Legacy kernel extension
+legacyKext="/Library/Application Support/Cisco/AnyConnect Secure Mobility Client/acsock.kext"
+# Stage extension
+legacyStaged="/Library/StagedExtensions/Library/Application Support/Cisco/AnyConnect Secure Mobility Client/acsock.kext"
 
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
-
-# Remove all previous versions
-# If found, run the Cisco AnyConnect client uninstaller
-if [[ -f "$clientUninstall" ]]; then
-    # Cisco uninstall script print status
-	bash "$clientUninstall"
-    # Removing previous package receipts
-	forgetCiscoReceipts
-    sleep 2
-else
-	echo "No previous Cisco AnyConnect Secure Mobility Client found"
-fi
-# If found, run the Cisco AnyConnect DART uninstaller
-if [[ -f "$dartUninstall" ]]; then
-	echo "Removing Cisco AnyConnect DART..."
-	bash "$dartUninstall"
-    sleep 2
-    if [[ ! -d "$dartApp" ]]; then
-        echo "Previous Cisco AnyConnect DART client removed"
-    else
-        echo "Failed to remove previous Cisco AnyConnect DART client"
-    fi        
-else
-	echo "No previous Cisco AnyConnect DART found"
-fi
-# If found, remove previous Cisco preferences
-if [[ -d "$configDir" ]]; then
-	echo "Removing previous Cisco client preferences..."
-	rm -rf "$configDir"
-    if [[ ! -d "$configDir" ]]; then
-        echo "Previous Cisco client preferences removed"
-    else
-        echo "Failed to remove previous Cisco client preferences"
-    fi
-    # Removing previous package receipts
-    forgetCiscoReceipts
-else
-	echo "No previous Cisco client preferences found"
-fi
 
 # Install current package
 # Unzip the package
@@ -109,7 +54,53 @@ else
     exit 1
 fi
 
-# Clean up
+# Move or remove the legacy kernel extension
+# macOS Big Sur uses a system extension but all previous versions of macOS use the kernel extension
+autoload is-at-least
+if ! is-at-least "$bigSur" "$osVersion"; then
+    if [[ -d "$legacyKext" ]]; then
+        # Kext status
+        kextCheck=$(kextstat -l | grep "com.cisco.kext.acsock" | awk '{print $6}')
+        if [[ "$kextCheck" == "" ]]; then
+            echo "Loading the Cisco AnyConnect kext..."
+                while [[ "$kextCheck" == "" ]]; do
+                    /sbin/kextload -b "com.cisco.kext.acsock" 2>/dev/null
+                    sleep 2
+                    # re-populate variable
+                    kextCheck=$(kextstat -l | grep "com.cisco.kext.acsock" | awk '{print $6}')
+                done
+            echo "Cisco AnyConnect kext successfully loaded"
+        else
+            echo "Cisco AnyConnect kext loaded"
+        fi
+    else
+        echo "Legacy kernel extension not found"
+        echo "Cisco AnyConnect will not function correctly without the kext, reinstall the application"
+        exit 1
+    fi
+else
+    # If found, remove the legacy extension
+    if [[ -d "$legacyKext" ]]; then
+        echo "Removing legacy kernel extension"
+        rm -rf "/Library/Application Support/Cisco"
+        if [[ ! -d "$legacyKext" ]]; then
+            echo "Legacy kernel extension removed"
+        else
+            echo "Failed to remove the legacy kernel extension"
+        fi
+    else
+        echo "Legacy kernel extension not found"
+    fi
+fi
+
+# If required, clear staged extensions and rebuild the kextcache
+if [[ -d "$legacyStaged" ]]; then
+    echo "Staged legacy extension found"
+    echo "Clearing staged Cisco kernel extension"
+    kextcache -prune-staging
+fi
+
+# Clean up temp content
 rm -rf "$installDir"
 if [[ ! -d "$installDir" ]]; then
     echo "Temp files cleaned up"
