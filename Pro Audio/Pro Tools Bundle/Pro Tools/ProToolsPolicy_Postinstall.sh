@@ -11,11 +11,6 @@
 #                            Variables                                 #
 ########################################################################
 
-# OS Version Full and Short
-osFull=$(sw_vers -productVersion)
-osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
-# Mac model full name
-macModelFull=$(system_profiler SPHardwareDataType | grep "Model Name" | sed 's/Model Name: //' | xargs)
 # Package receipt
 pkgReceipt=$(pkgutil --pkgs | grep "ukavidprotools2020.9.1")
 # Jamf Helper
@@ -45,19 +40,6 @@ Please contact the IT Service Desk on 0345 058 4444 for assistance" -timeout 60 
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
-
-# Check OS version and install relevant user preference package (User Template)
-# Different packages due to the directory moving to /Library/User Template/ in Catalina
-echo "Checking User Template package requirements..."
-if [[ "$osShort" -le "14" ]]; then
-    echo "${macModelFull} running macOS ${osFull}"
-    /usr/local/jamf/bin/jamf policy -event pt_bundle_preferences_mojave
-elif [[ "$osShort" -ge "15" ]]; then
-    echo "${macModelFull} running macOS ${osFull}"
-    /usr/local/jamf/bin/jamf policy -event pt_bundle_preferences
-else
-    echo "${macModelFull} running macOS ${osFull}, no User Template package requirement"
-fi
 
 # Kill the install in progess jamf Helper window
 killall jamfHelper 2>/dev/null
