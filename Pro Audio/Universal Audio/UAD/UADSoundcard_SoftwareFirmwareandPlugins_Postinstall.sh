@@ -12,12 +12,7 @@
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareandplugins9.12.1")
-# OS Version Full and Short
-osFull=$(sw_vers -productVersion)
-osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
-# Mac model full name
-macModelFull=$(system_profiler SPHardwareDataType | grep "Model Name" | sed 's/Model Name: //' | xargs)
+pkgReceipt=$(pkgutil --pkgs | grep "ukuadsoftwarefirmwareplugins9.12.1")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper problem icon 
@@ -58,19 +53,6 @@ Your Mac will now be rebooted" -alignDescription natural -timeout 15 -button1 "O
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
-
-# Check OS version and install relevant user preference package (User Template)
-# Different packages due to the directory moving to /Library/User Template/ in Catalina
-echo "Checking User Template package requirements..."
-if [[ "$osShort" -le "14" ]]; then
-    echo "${macModelFull} running macOS ${osFull}"
-    /usr/local/jamf/bin/jamf policy -event uad_preferences_pre_catalina
-elif [[ "$osShort" -ge "15" ]]; then
-    echo "${macModelFull} running macOS ${osFull}"
-    /usr/local/jamf/bin/jamf policy -event uad_preferences
-else
-    echo "${macModelFull} running macOS ${osFull}, no User Template package requirement"
-fi
 
 #Kill the install in progess jamf Helper window
 killall jamfHelper

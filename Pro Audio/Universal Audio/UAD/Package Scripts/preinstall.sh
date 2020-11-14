@@ -14,18 +14,50 @@
 # The package from the vendor included 9 scripts and multiple steps that are considered bad practice from an enterprise perspective
 # Their package is very much aimed at a user with a personal Mac so I have re-engineered it to be more suitable for enterprise deployment
 
+# Includes use of outset to copy user content so requires macOS 10.15+
+
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
-# Get the logged in user
+# Logged in user
 loggedInUser=$(stat -f %Su /dev/console)
-# OS Version (Short)
-osShort=$(sw_vers -productVersion | awk -F. '{print $2}')
+# Logged in user unique ID
+loggedInUserUID=$(dscl . -read /Users/"$loggedInUser" UniqueID | awk '{print $2}')
+# Logged in user ouset once plist
+outsetOncePlist="/usr/local/outset/share/com.github.outset.once.${loggedInUserUID}.plist"
+# OS Version
+osVersion=$(SYSTEM_VERSION_COMPAT=1 sw_vers -productVersion)
+# OS Version (Minor)
+osMinor=$(SYSTEM_VERSION_COMPAT=1 sw_vers -productVersion | awk -F. '{print $2}')
+# Mac model
+macModelFull=$(system_profiler SPHardwareDataType | grep "Model Name" | sed 's/Model Name: //' | xargs)
 
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
+
+# Check OS version meets requirements
+if [[ "$osMinor" -ge "15" ]]; then
+    echo "$macModelFull running ${osVersion}, starting install..."
+else
+    echo "$macModelFull running ${osVersion}, macOS Catalina or later required"
+    echo "Exiting...."
+    exit 1
+fi
+
+# Delete any previous outset once plist for the logged in user to make sure new scripts run
+if [[ -f "$outsetOncePlist" ]]; then
+    echo "Outset Once plist found for ${loggedInUser}"
+    rm -f "$outsetOncePlist"
+    if [[ ! -f "$outsetOncePlist" ]]; then
+        echo "Outset Once plist deleted successfully"
+        echo "Outset Once content will run for ${loggedInUser}"
+    else
+        echo "Failed to delete Outset Once plist for ${loggedInUser}"
+        echo "No new Outset Once content will run"
+    fi
+fi
 
 # Shut down LUNA - kill the process
 lunaPID=$(ps -A | grep -v grep | grep "LUNA" | awk '{print $1}')
@@ -405,7 +437,7 @@ rm -rf "/Library/Extensions/UAFWAudio.kext" 2>/dev/null
 
 # Check if the KEXTs exist in /Library/StagedExtensions/System/Library/Extensions/
 # If they exist then the Mac has been upgraded to Catalina with UAD installed
-if [[ "$osShort" -ge "15" ]]; then
+if [[ "$osMinor" -ge "15" ]]; then
     if [[ -d "/Library/StagedExtensions/System/Library/Extensions/UAD2System.kext" ]]; then
         echo "Clearing Staged Extensions"
         kextcache -clear-staging

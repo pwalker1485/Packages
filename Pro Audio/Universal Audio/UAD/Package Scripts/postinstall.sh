@@ -12,6 +12,11 @@
 # The package from the vendor included 9 scripts and multiple steps that are considered bad practice from an enterprise perspective
 # Their package is very much aimed at a user with a personal Mac so I have re-engineered it to be more suitable for enterprise deployment
 
+# Requirements for Outset
+# Outset (https://github.com/chilcote/outset)
+# macOS 10.15+
+# python 3.7+ (https://github.com/macadmins/python)
+
 ########################################################################
 #                            Variables                                 #
 ########################################################################
@@ -22,13 +27,14 @@ loggedInUser=$(stat -f %Su /dev/console)
 dockutilLoc="/usr/local/bin/dockutil"
 # Dock Items Array
 dockItems=( "com.uaudio.uad_meter" "com.uaudio.console" "com.uaudio.ua_realtime_rack" "com.uaudio.uninstaller" )
+# Outset binary
+outsetBinary="/usr/local/outset/outset"
 
 ########################################################################
 #                         Script starts here                           #
 ########################################################################
 
 # Remove previous versions items from the Dock
-
 if [[ -e "$dockutilLoc" ]]; then
 	echo "Removing previous versions Dock items..."
 	for dockitem in "${dockItems[@]}"; do
@@ -40,7 +46,6 @@ else
 fi
 
 # Update firmware
-
 # Run Meter passing firmware check command line switch.
 # This command must be run as the user, not as root, or else it will
 # leave a Juce lock file in ~/Library/Caches/Juce that will prevent
@@ -58,7 +63,6 @@ rm -f "/Users/$loggedInUser/Library/Caches/Juce/juceAppLock_UAD Meter" 2>/dev/nu
 rm -f "/Users/$loggedInUser/Library/Caches/Juce/juceAppLock_Console Shell" 2>/dev/null
 
 # Load the KEXTs
-
 # Check the KEXTs are there and then load them
 if [[ -d "/Library/Extensions/UAD2System.kext" ]] && [[ -d "/Library/Extensions/UAFWAudio.kext" ]]; then
     # Set correct permission
@@ -81,11 +85,9 @@ else
 fi
 
 # Delete Meter Cache
-
 rm -rf "/Users/$loggedInUser/Library/Caches/UAD Meter & Control Panel" 2>/dev/null
 
 # Clean-up temp files
-
 if [[ -e "$dockutilLoc" ]]; then
 	rm -f "$dockutilLoc" 2>/dev/null
 	if [[ ! -e "$dockutilLoc" ]]; then
@@ -93,6 +95,21 @@ if [[ -e "$dockutilLoc" ]]; then
 	else
 		echo "Clean-up FAILED, manual clean-up required"
 	fi
+fi
+
+# Copy user content for the currently logged in user
+# Make sure Outset is installed
+if [[ -e "$outsetBinary" ]]; then
+    echo "Outset binary found"
+    # Run all login-privileged scripts to copy user content
+    echo "Running all login-privileged scripts..."
+    "$outsetBinary" --login-privileged
+    echo "All login-privileged scripts completed"
+    echo "Check the logs in /Library/Logs/Bauer/Outset for more detail"
+else
+    echo "Outset binary not found!"
+    echo "Unable to copy any Pro Audio user settings"
+    exit 1
 fi
 
 exit 0
