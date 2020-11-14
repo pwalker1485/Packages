@@ -63,5 +63,4 @@ else
         echo "Waves audio cache directory for ${loggedInUser} found, nothing to do"
     fi
 fi
-
 exit 0
