@@ -6,10 +6,10 @@
 
 # Get the logged in user
 loggedInUser=$(stat -f %Su /dev/console)
+# Get the logged in users ID
+loggedInUserID=$(id -u "$loggedInUser")
 # NoMAD Launch Agent
 launchAgent="/Library/LaunchAgents/com.trusourcelabs.NoMAD.plist"
-# NoMAD process
-nomadProc=$(pgrep "NoMAD")
 # NoMAD app
 nomadApp="/Applications/NoMAD.app"
 
@@ -23,30 +23,36 @@ function runAsUser ()
 if [[ "$loggedInUser" == "" ]] || [[ "$loggedInUser" == "root" ]]; then
     echo "No user logged in, unable to run commands as a user"
 else
-    userID=$(id -u "$loggedInUser")
-    launchctl asuser "$userID" sudo -u "$loggedInUser" "$@"
+    launchctl asuser "$loggedInUserID" sudo -u "$loggedInUser" "$@"
 fi
 }
 
-function unloadLaunchAgent ()
+function removeLaunchAgent ()
 {
-# Get the status of the launch daemon
-launchAgentStatus=$(runAsUser launchctl list | grep -i "com.trusourcelabs.NoMAD")
-if [[ "$launchAgentStatus" != "" ]]; then
-    echo "Stopping and unloading the Launch Agent..."
-    runAsUser launchctl stop "$launchAgent"
-    runAsUser launchctl unload "$launchAgent"
-    /bin/sleep 2
-    # re-populate variable
+if [[ -f "$launchAgent" ]]; then
+    # Get the status of the launch daemon
     launchAgentStatus=$(runAsUser launchctl list | grep -i "com.trusourcelabs.NoMAD")
-    if [[ "$launchAgentStatus" == "" ]]; then
-        echo "NoMAD Launch Agent stopped and unloaded"
+    if [[ "$launchAgentStatus" != "" ]]; then
+        echo "Removing the Launch Agent..."
+        launchctl bootout gui/"$loggedInUserID" "$launchAgent"
+        sleep 2
+        # Remove the plist
+        rm -f "$launchAgent" 2>/dev/null
+        # re-populate variable
+        launchAgentStatus=$(runAsUser launchctl list | grep -i "com.trusourcelabs.NoMAD")
+        if [[ "$launchAgentStatus" == "" ]]; then
+            echo "NoMAD Launch Agent removed"
+        else
+            echo "Failed to remove the Launch Agent"
+        fi
     else
-        echo "Failed to stop and unload the Launch Agent"
+        echo "NoMAD Launch Agent not currently loaded"
+        # Remove the plist
+        rm -f "$launchAgent" 2>/dev/null
     fi
 else
-    echo "NoMAD Launch Agent not currently loaded, nothing to do"
-fi
+    echo "NoMAD Launch Agent not found"
+fi    
 }
 
 ########################################################################
@@ -70,16 +76,14 @@ if [[ "$loggedInUser" == "" ]] || [[ "$loggedInUser" == "root" ]]; then
     fi
 else
     echo "${loggedInUser} logged in, removing any previous version of NoMAD..."
-    # Unload the Launch Agent
-    unloadLaunchAgent
+    # Remove the Launch Agent
+    removeLaunchAgent
     # If running, kill the process
-    echo "Checking for NoMAD process"
-    if [[ "$nomadProc" != "" ]]; then
+    if [[ "$(pgrep NoMAD)" != "" ]]; then
         echo "NoMAD running, killing the process"
         pkill -9 "NoMAD" >/dev/null 2>&1
         sleep 2        
-        nomadProc=$(pgrep "NoMAD")
-        if [[ "$nomadProc" == "" ]]; then
+        if [[ "$(pgrep NoMAD)" == "" ]]; then
             echo "NoMAD process killed"
         else
             echo "Failed to kill NoMAD process"
