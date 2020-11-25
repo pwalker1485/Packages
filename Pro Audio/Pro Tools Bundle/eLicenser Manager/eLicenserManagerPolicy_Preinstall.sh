@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ########################################################################
-#            Pro Tools Bundle - eLicenser Manager Preinstall           #
+#        Pro Tools Bundle - eLicenser Control Center Preinstall        #
 #################### Written by Phil Walker May 2020 ###################
 ########################################################################
 
