@@ -1,18 +1,24 @@
 #!/bin/bash
 
 ########################################################################
-#           Pro Tools Bundle - eLicenser Manager Postinstall           #
+#        Pro Tools Bundle - eLicenser Control Center Postinstall       #
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
-
 # Edit May 2020
+
+########################################################################
+#                         Jamf Variables                               #
+########################################################################
+
+# Package bundle identifier e.g uksteinbergelicensercontrolcenter6.12.5.1279
+pkgBundleIdentifier="$4"
 
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "uksteinbergelicensercontrolcenter6.12.4.1275")
+pkgReceipt=$(pkgutil --pkgs | grep "$pkgBundleIdentifier")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon
@@ -42,7 +48,7 @@ Please contact the IT Service Desk on 0345 058 4444 for assistance" -timeout 60 
 ########################################################################
 
 # Kill the install in progess jamf Helper window
-killall jamfHelper 2>/dev/null
+killall -13 jamfHelper 2>/dev/null
 
 if [[ "$pkgReceipt" != "" ]]; then
     # Install was successful, call the next policy

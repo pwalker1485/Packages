@@ -4,15 +4,21 @@
 #          Pro Tools Bundle - iLok License Manager postinstall         #
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
-
 # Edit May 2020
+
+########################################################################
+#                         Jamf Variables                               #
+########################################################################
+
+# Package bundle identifier e.g com.paceap.pkg.eden.iLokLicenseManager
+pkgBundleIdentifier="$4"
 
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "com.paceap.pkg.eden.iLokLicenseManager")
+pkgReceipt=$(pkgutil --pkgs | grep "$pkgBundleIdentifier")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper icon

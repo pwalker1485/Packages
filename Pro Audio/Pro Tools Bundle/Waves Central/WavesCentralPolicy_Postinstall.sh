@@ -4,15 +4,21 @@
 #             Pro Tools Bundle - Waves Central Postinstall             #
 #################### Written by Phil Walker Jan 2020 ###################
 ########################################################################
-
 # Edit May 2020
+
+########################################################################
+#                         Jamf Variables                               #
+########################################################################
+
+# Package bundle identifier e.g ukwaveswavescentral12.0.11
+pkgBundleIdentifier="$4"
 
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
 # Package receipt
-pkgReceipt=$(pkgutil --pkgs | grep "ukwaveswavescentral12.0.8")
+pkgReceipt=$(pkgutil --pkgs | grep "$pkgBundleIdentifier")
 # Jamf Helper
 jamfHelper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 # Helper problem icon 
@@ -57,7 +63,7 @@ Your Mac will now be rebooted" -alignDescription natural -timeout 15 -button1 "O
 ########################################################################
 
 # Kill the install in progess jamf Helper window
-killall jamfHelper 2>/dev/null
+killall -13 jamfHelper 2>/dev/null
 
 if [[ "$pkgReceipt" != "" ]]; then
     # Install was successful, Mac will now be rebooted
