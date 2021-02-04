@@ -62,7 +62,7 @@ Your Mac will now be rebooted" -alignDescription natural -timeout 15 -button1 "O
 #                         Script starts here                           #
 ########################################################################
 
-# Kill the install in progess jamf Helper window
+# Kill the install in progress jamf Helper window
 killall -13 jamfHelper 2>/dev/null
 
 if [[ "$pkgReceipt" != "" ]]; then
