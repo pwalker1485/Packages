@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>GroupName</key>
+	<string>wheel</string>
+	<key>InitGroups</key>
+	<false/>
+	<key>Label</key>
+	<string>com.bauer.AutoCCUpdates</string>
+	<key>Program</key>
+	<string>/usr/local/bin/AutoInstallAdobeCCUpdates.sh</string>
+	<key>StartCalendarInterval</key>
+	<array>
+		<dict>
+			<key>Hour</key>
+			<integer>9</integer>
+		</dict>
+		<dict>
+			<key>Hour</key>
+			<integer>13</integer>
+		</dict>
+	</array>
+	<key>UserName</key>
+	<string>root</string>
+</dict>
+</plist>
