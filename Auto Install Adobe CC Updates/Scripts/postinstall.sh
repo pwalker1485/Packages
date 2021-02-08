@@ -1,17 +1,18 @@
-#!/bin/sh
+#!/bin/zsh
 
 ########################################################################
 #    Automatically Install All Adobe CC Application Updates Package    #
 #                         postinstall script                           #    
 #################### Written by Phil Walker Mar 2020 ###################
 ########################################################################
+# Edit Nov 2020
 
 ########################################################################
 #                            Variables                                 #
 ########################################################################
 
-#Launch Daemon
-LaunchDaemon=/Library/LaunchDaemons/com.bauer.AdobeRUM.plist
+# Launch Daemon
+launchDaemon="/Library/LaunchDaemons/com.bauer.AutoCCUpdates.plist"
 
 ########################################################################
 #                            Functions                                 #
@@ -19,14 +20,13 @@ LaunchDaemon=/Library/LaunchDaemons/com.bauer.AdobeRUM.plist
 
 function launchDaemonStatus ()
 {
-#Get the status of the Launch Daemon
-checkLaunchD=$(launchctl list | grep "com.bauer.AdobeRUM" | cut -f3)
-
-if [[ "$checkLaunchD" == "com.bauer.AdobeRUM" ]]; then
-  echo "Adobe RUM Launch Daemon loaded"
+# Get the status of the Launch Daemon
+checkLaunchD=$(launchctl list | grep "com.bauer.AutoCCUpdates")
+if [[ "$checkLaunchD" != "" ]]; then
+    echo "Bauer Adobe CC Auto Updates Launch Daemon bootstrapped"
 else
-  echo "Something went wrong, Adobe RUM Launch Daemon not currently loaded!"
-  echo "Reboot required"
+    echo "Something went wrong, the Bauer Adobe CC Auto Updates Launch Daemon is not currently bootstrapped!"
+    echo "Reboot required"
 fi
 }
 
@@ -34,12 +34,9 @@ fi
 #                         Script starts here                           #
 ########################################################################
 
-#load the Launch Daemon
-launchctl load "$LaunchDaemon"
-
+# Bootstrap the Launch Daemon
+launchctl bootstrap system "$launchDaemon"
 sleep 2
-
-#Check if the Launch Daemon was loaded successfully
+# Check if the Launch Daemon was bootstrapped successfully
 launchDaemonStatus
-
 exit 0
